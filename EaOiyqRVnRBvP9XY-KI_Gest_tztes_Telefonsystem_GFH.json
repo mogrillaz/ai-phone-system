@@ -1,0 +1,837 @@
+{
+  "name": "KI-Gestütztes Telefonsystem GFH",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "03423e02-ba5d-4651-aa58-0698291ed380",
+        "responseMode": "responseNode",
+        "options": {
+          "binaryPropertyName": "data"
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -2064,
+        -752
+      ],
+      "id": "db6ed3cf-62b0-4ec9-a099-0ab243c9370f",
+      "name": "Webhook",
+      "webhookId": "03423e02-ba5d-4651-aa58-0698291ed380"
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Response>\n  <Gather input=\"dtmf\"\n          numDigits=\"5\"\n          finishOnKey=\"#\"\n          timeout=\"10\"\n          action=\"https://pikenest.app.n8n.cloud/webhook/96474579-abaf-40be-a628-91957f33fa4b\"\n          method=\"POST\">\n    <Play>https://raw.githubusercontent.com/pikenest/gfh-ivr-audio/main/Willkommen-2.wav</Play>\n  </Gather>\n\n  <Say language=\"de-DE\">\n    Sie haben kein Eingabe gemacht. Bitte rufen Sie uns erneut.\n  </Say>\n</Response>\n",
+        "options": {
+          "responseCode": 200,
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "content-type",
+                "value": "application/xml"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        -1888,
+        -752
+      ],
+      "id": "c0d8a3d0-d1fb-4d05-b658-e086c603275c",
+      "name": "Respond to Webhook",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "96474579-abaf-40be-a628-91957f33fa4b",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -2064,
+        -608
+      ],
+      "id": "c5a770b4-1e0b-4d89-91a2-86471e03b836",
+      "name": "Webhook B",
+      "webhookId": "96474579-abaf-40be-a628-91957f33fa4b"
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Response>\n  <Play>https://raw.githubusercontent.com/pikenest/gfh-ivr-audio/main/Anliegen.wav</Play>\n <Record\n    action=\"https://pikenest.app.n8n.cloud/webhook/0ad746bd-07e2-4f10-ac71-c19760338e81\"\n    method=\"POST\"\n    maxLength=\"30\"\n    timeout=\"5\"\n    playBeep=\"true\"\n    trim=\"trim-silence\"/>\n\n  <Say language=\"de-DE\">Keine Aufnahme erhalten. Bitte rufen Sie erneut an.</Say>\n\n</Response>\n\n",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "content-type",
+                "value": "text/xml"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        -1888,
+        -608
+      ],
+      "id": "47cbc7ed-6cc1-4f03-8442-7a676c6d7f72",
+      "name": "Respond to Webhook1",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "0ad746bd-07e2-4f10-ac71-c19760338e81",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -2064,
+        -464
+      ],
+      "id": "696b96eb-cb31-4c76-96b0-4d7ae33d48ca",
+      "name": "Webhook C",
+      "webhookId": "0ad746bd-07e2-4f10-ac71-c19760338e81",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Response>\n<Play>https://raw.githubusercontent.com/pikenest/gfh-ivr-audio/main/auf_wieder_sehen.wav</Play>\n  <Hangup/>\n</Response>\n\n\n",
+        "options": {
+          "responseCode": 200,
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "content-type",
+                "value": "text/xml"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        -1888,
+        -464
+      ],
+      "id": "722c19b8-a90c-4cf8-b273-90f66a1ea436",
+      "name": "Respond to Webhook2",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "value": "TazF62DDqCBWUiTR",
+          "mode": "list",
+          "cachedResultName": "gfh_calls",
+          "cachedResultUrl": "/projects/Zqc65WpkwnFpLUPa/datatables/TazF62DDqCBWUiTR"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "CallSid": "={{$json.body.CallSid}}",
+            "Telefonnummer": "={{$json.body.From}}",
+            "PLZ": "=",
+            "recordingUrl": "=",
+            "Status": "=started"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "CallSid",
+              "displayName": "CallSid",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Telefonnummer",
+              "displayName": "Telefonnummer",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "PLZ",
+              "displayName": "PLZ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "recordingUrl",
+              "displayName": "recordingUrl",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1,
+      "position": [
+        -1712,
+        -752
+      ],
+      "id": "62b503e3-afca-400a-9fb0-6c7aa1164f8c",
+      "name": "Insert row"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "dataTableId": {
+          "__rl": true,
+          "value": "TazF62DDqCBWUiTR",
+          "mode": "list",
+          "cachedResultName": "gfh_calls",
+          "cachedResultUrl": "/projects/Zqc65WpkwnFpLUPa/datatables/TazF62DDqCBWUiTR"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "CallSid",
+              "keyValue": "={{$json.body.CallSid}}"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "PLZ": "={{$json.body.Digits}}",
+            "Status": "plz okey"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "CallSid",
+              "displayName": "CallSid",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Telefonnummer",
+              "displayName": "Telefonnummer",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "PLZ",
+              "displayName": "PLZ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "recordingUrl",
+              "displayName": "recordingUrl",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "dryRun": false
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1,
+      "position": [
+        -1712,
+        -608
+      ],
+      "id": "5e017da0-3a0d-4d7f-aaa0-c1be7a8a6b79",
+      "name": "Update row(s)"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "dataTableId": {
+          "__rl": true,
+          "value": "TazF62DDqCBWUiTR",
+          "mode": "list",
+          "cachedResultName": "gfh_calls",
+          "cachedResultUrl": "/projects/Zqc65WpkwnFpLUPa/datatables/TazF62DDqCBWUiTR"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "CallSid",
+              "keyValue": "={{$json.body.CallSid}}"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Status": "Completed",
+            "recordingUrl": "={{$json.body.RecordingUrl}}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "CallSid",
+              "displayName": "CallSid",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Telefonnummer",
+              "displayName": "Telefonnummer",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "PLZ",
+              "displayName": "PLZ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "recordingUrl",
+              "displayName": "recordingUrl",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1,
+      "position": [
+        -1712,
+        -464
+      ],
+      "id": "73786df2-7783-4571-91fd-0598186e0578",
+      "name": "Update row(s)1"
+    },
+    {
+      "parameters": {
+        "amount": 30
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -1456,
+        -672
+      ],
+      "id": "52736794-619f-40b5-afbb-8aaa46767ba3",
+      "name": "Wait",
+      "webhookId": "49a29f69-08cf-440b-961c-0a077a293a0a"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.recordingUrl }}.wav",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBasicAuth",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -1088,
+        -672
+      ],
+      "id": "f75bec11-da4c-45be-88a2-00dd1f40122d",
+      "name": "HTTP Request",
+      "alwaysOutputData": false,
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "fy16snbod5mKOGab",
+          "name": "Twillio"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "audio",
+        "operation": "transcribe",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.1,
+      "position": [
+        -1456,
+        -528
+      ],
+      "id": "948abcef-7ee8-4106-9d46-9a5c92f4d0d2",
+      "name": "Transcribe a recording",
+      "credentials": {
+        "openAiApi": {
+          "id": "zUNnp1Lr9UcBCMgw",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1) Call aus \"Get Call\"\nconst callItem = $items(\"Get Call\")[0];\nif (!callItem) throw new Error('Kein Call aus \"Get Call\" erhalten');\n\nconst callPLZ = String(callItem.json.PLZ ?? \"\").trim();\nif (!callPLZ) throw new Error('Call-PLZ leer (Feld \"PLZ\")');\n\n// 2) Anliegen aus \"Transcribe a recording\" (oder ersetze das durch callItem.json.text wenn du es dort hast)\nconst transcribeItem = $items(\"Transcribe a recording\")[0];\nconst anliegen =\n  String(transcribeItem?.json?.text ?? \"\").trim() || \"(keine Mitteilung erfasst)\";\n\n// 3) Reviere aus \"Get Reviere\"\nconst reviereItems = $items(\"Get Reviere\");\nif (!reviereItems.length) throw new Error('Keine Reviere aus \"Get Reviere\" erhalten');\n\n// 4) Match per PLZ\nconst matches = reviereItems.filter(r => {\n  const plzFeld = r.json.PLZ;\n  if (!plzFeld) return false;\n\n  const list = String(plzFeld)\n    .split(\",\")\n    .map(x => x.trim())\n    .filter(Boolean);\n\n  return list.includes(callPLZ);\n});\n\n// 5) Output\nif (!matches.length) {\n  return [{\n    json: {\n      ...callItem.json,\n      anliegen,\n      matched: false,\n      matchedEmail: null,\n      matchedRevier: null,\n      matchedStadtteile: null,\n    }\n  }];\n}\n\nconst m = matches[0].json;\n\nreturn [{\n  json: {\n    ...callItem.json,\n    anliegen,\n    matched: true,\n    matchedEmail: m.EmailAdresse,\n    matchedRevier: m.Revier,\n    matchedStadtteile: m.Stadtteile,\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1088,
+        -528
+      ],
+      "id": "f9f86082-ab82-4c25-a95d-bd90a078a05b",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "TazF62DDqCBWUiTR",
+          "mode": "list",
+          "cachedResultName": "gfh_calls",
+          "cachedResultUrl": "/projects/Zqc65WpkwnFpLUPa/datatables/TazF62DDqCBWUiTR"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "CallSid",
+              "keyValue": "={{ $json.CallSid }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1,
+      "position": [
+        -1280,
+        -672
+      ],
+      "id": "d5e021bc-1e59-4809-ac99-23f3680ffbdf",
+      "name": "Get Call"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "Tyh58DcjnKeI7WxD",
+          "mode": "list",
+          "cachedResultName": "Haushaltsreviere",
+          "cachedResultUrl": "/projects/Zqc65WpkwnFpLUPa/datatables/Tyh58DcjnKeI7WxD"
+        },
+        "matchType": "allConditions"
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1,
+      "position": [
+        -1280,
+        -528
+      ],
+      "id": "51c6c56f-7396-4a55-9af1-2ca1e5b8d573",
+      "name": "Get Reviere"
+    },
+    {
+      "parameters": {
+        "toRecipients": "={{ $json.matchedEmail }}",
+        "subject": "=Anliegen – Revier {{ $json.matchedRevier }} / PLZ {{ $json.PLZ }}",
+        "bodyContent": "=Sehr geehrte Damen und Herren,\n\nein neues Anliegen ist eingegangen und wurde anhand der angegebenen Postleitzahl\nautomatisch Ihrem Zuständigkeitsbereich zugeordnet.\n\nPostleitzahl:{{ $json.PLZ }}\nRevier: {{ $json.matchedRevier }}\nBetroffene Stadtteile: {{ $json.matchedStadtteile }}\nTelefonnummer: {{ $json.Telefonnummer }}\n\nDas Anliegen wurde telefonisch übermittelt und nachfolgend transkribiert:\n\n----------------------------------\nAnliegen:\n{{ $json.anliegen }}\n----------------------------------\nDieses Schreiben dient Ihrer Information zur weiteren Bearbeitung.\n\nMit freundlichen Grüßen  \n\nTeam GFH\n",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        -864,
+        -608
+      ],
+      "id": "90f74b74-9357-4d68-9bd9-ee7580baf2b3",
+      "name": "Send a message",
+      "webhookId": "39188f05-23e3-4e33-b958-468a7ba873dd",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "9Fz52JGMcGPajIKF",
+          "name": "Private Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n  item.json.myNewField = 1;\n}\n\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1456,
+        -880
+      ],
+      "id": "ce9bf289-8086-4401-bb06-a9b28c09d9db",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "toRecipients": "={{ $json.matchedEmail }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        -1248,
+        -880
+      ],
+      "id": "6c651753-02df-48ca-a18e-985f90f84e4e",
+      "name": "Send a message1",
+      "webhookId": "b0be2560-169e-423a-bdf0-848ddec7e4b0",
+      "credentials": {
+        "microsoftOutlookOAuth2Api": {
+          "id": "9Fz52JGMcGPajIKF",
+          "name": "Private Account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Respond to Webhook": {
+      "main": [
+        [
+          {
+            "node": "Insert row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook B": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook C": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Respond to Webhook1": {
+      "main": [
+        [
+          {
+            "node": "Update row(s)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Respond to Webhook2": {
+      "main": [
+        [
+          {
+            "node": "Update row(s)1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert row": {
+      "main": [
+        []
+      ]
+    },
+    "Update row(s)": {
+      "main": [
+        []
+      ]
+    },
+    "Update row(s)1": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Get Call",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Transcribe a recording",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transcribe a recording": {
+      "main": [
+        [
+          {
+            "node": "Get Reviere",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Call": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Reviere": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Send a message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": {
+    "node:Twilio Trigger": {
+      "sinkId": "DGc7bc1e70645cbda7f9d7b83d76b6b19c",
+      "subscriptionId": "DF07fe1a0372c80de8d8d4e9b9a4adfd93"
+    }
+  },
+  "pinData": {
+    "Webhook C": [
+      {
+        "json": {
+          "headers": {
+            "host": "pikenest.app.n8n.cloud",
+            "user-agent": "TwilioProxy/1.1",
+            "content-length": "670",
+            "accept": "*/*",
+            "accept-encoding": "gzip, br",
+            "cdn-loop": "cloudflare; loops=1; subreqs=1",
+            "cf-connecting-ip": "54.167.20.206",
+            "cf-ew-via": "15",
+            "cf-ipcountry": "US",
+            "cf-ray": "9b3f6ec9038dd6d5-IAD",
+            "cf-visitor": "{\"scheme\":\"https\"}",
+            "cf-worker": "n8n.cloud",
+            "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+            "i-twilio-idempotency-token": "9d80637b-4018-4cbb-bdbf-e58ef035e75e",
+            "referer": "https://pikenest.app.n8n.cloud/webhook/96474579-abaf-40be-a628-91957f33fa4b",
+            "x-forwarded-for": "54.167.20.206, 172.71.194.142",
+            "x-forwarded-host": "pikenest.app.n8n.cloud",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "traefik-prod-users-gwc-63-757945c69-8hs9x",
+            "x-home-region": "us1",
+            "x-is-trusted": "yes",
+            "x-real-ip": "54.167.20.206",
+            "x-twilio-answertimeout": "PT15S, PT15S",
+            "x-twilio-service-flow-event": "%7B%22flow_id%22%3A%22voice_twimlverb_01kdcymp89frxadfqd9rv1syk2%22%2C%22type%22%3A%22api_event%22%2C%22action%22%3A%22twiml_fetch%22%2C%22sub_action%22%3A%22completed%22%2C%22result%22%3A%22success%22%2C%22metadata%22%3A%7B%22transfer_type%22%3A%22call_transfer_url%22%7D%7D",
+            "x-twilio-signature": "PY5JBLPeZRrZYyJyxOr/ojlzLtg="
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "Called": "+4921186089040",
+            "RecordingUrl": "https://api.twilio.com/2010-04-01/Accounts/ACb3439b72e996a83613eec147e5d69cf5/Recordings/REc4b1e84d0e5c379246e1b1d1f3594c59",
+            "ToState": "Stadt",
+            "CallerCountry": "DE",
+            "Direction": "inbound",
+            "CallerState": "",
+            "ToZip": "",
+            "CallSid": "CAe482c0db2ec4e11ec94c8f0cf78c8236",
+            "To": "+4921186089040",
+            "CallerZip": "",
+            "ToCountry": "DE",
+            "CalledZip": "",
+            "ApiVersion": "2010-04-01",
+            "CalledCity": "Hilden",
+            "CallStatus": "in-progress",
+            "RecordingSid": "REc4b1e84d0e5c379246e1b1d1f3594c59",
+            "From": "+491778355800",
+            "AccountSid": "ACb3439b72e996a83613eec147e5d69cf5",
+            "CalledCountry": "DE",
+            "CallerCity": "",
+            "ToCity": "Hilden",
+            "FromCountry": "DE",
+            "Caller": "+491778355800",
+            "FromCity": "",
+            "CalledState": "Stadt",
+            "FromZip": "",
+            "FromState": "",
+            "RecordingDuration": "8"
+          },
+          "webhookUrl": "https://pikenest.app.n8n.cloud/webhook/0ad746bd-07e2-4f10-ac71-c19760338e81",
+          "executionMode": "production"
+        }
+      }
+    ]
+  },
+  "triggerCount": 3,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  }
+}
